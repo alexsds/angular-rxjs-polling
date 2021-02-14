@@ -1,4 +1,9 @@
-# AngularRxjsPolling
+# Angular RxJS Polling
+
+# Demo
+[https://alexsds-angular-rxjs-polling.web.app/](https://alexsds-angular-rxjs-polling.web.app/)
+
+![demo.gif](documents/demo.gif)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.2.
 
