@@ -13,7 +13,7 @@ export class AppComponent {
   response!: CatApiResponse;
 
   constructor(private pollingService: PollingService) {
-    this.pollingService.poll<CatApiResponse[]>(environment.api_url).subscribe(response => {
+    this.pollingService.poll<CatApiResponse[]>(environment.api_url, environment.period).subscribe(response => {
       console.log(response[0]);
       this.response = response[0];
     });
