@@ -1,0 +1,8 @@
+<div *ngIf="response; else loading">
+  <img height="200" src="{{response.url}}" alt="">
+  <br>
+  <pre>{{response | json}}</pre>
+</div>
+<ng-template #loading>
+  <p>Loading ...</p>
+</ng-template>
