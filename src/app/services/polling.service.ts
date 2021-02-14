@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, timer} from 'rxjs';
-import {concatMapTo} from 'rxjs/operators';
+import {fromEvent, Observable, timer} from 'rxjs';
+import {concatMapTo, map, repeatWhen, shareReplay, takeUntil} from 'rxjs/operators';
 
 @Injectable()
 export class PollingService {
@@ -10,7 +10,8 @@ export class PollingService {
 
   poll<T>(url: string, period: number): Observable<T> {
     return this.http.get<T>(url).pipe(
-        pollWithPeriod(period)
+        pollWithPeriod(period),
+        whenOnline()
     );
   }
 }
@@ -18,5 +19,23 @@ export class PollingService {
 const pollWithPeriod = (period: number, initialDelay = 0) => {
   return <T>(source: Observable<T>) => {
     return timer(initialDelay, period).pipe(concatMapTo(source));
+  };
+};
+
+const whenOnline = () => {
+  const offline$ = fromEvent(window, 'offline').pipe(
+      shareReplay({refCount: true, bufferSize: 1}),
+      map(() => false)
+  );
+  const online$ = fromEvent(window, 'online').pipe(
+      shareReplay({refCount: true, bufferSize: 1}),
+      map(() => true)
+  );
+
+  return <T>(source: Observable<T>) => {
+    return source.pipe(
+        takeUntil(offline$),
+        repeatWhen(() => online$)
+    );
   };
 };
