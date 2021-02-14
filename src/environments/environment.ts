@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'https://api.thecatapi.com/v1/images/search',
+  api_url: '/mock/responses/thecatapi.com.response.json',
   period: 2000,
 };
 
